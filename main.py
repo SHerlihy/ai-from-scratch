@@ -30,5 +30,6 @@ class SimpleTokenizerV2:
     def decode(self, ids):
         text = " ".join([self.int_to_str[i] for i in ids])
 
-        text = re.sub(r'\s+([,.?!"()\'])', r'\1', text)
+        text = re.sub(r"\s+([,.?!”\"()\'])", r"\1", text)
+        text = re.sub(r"'\s+([a-zA-Z])", r"'\1", text)
         return text
