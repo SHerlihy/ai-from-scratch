@@ -40,7 +40,7 @@ class SimpleTokenizerTests(unittest.TestCase):
                 expected
             )
 
-    def test_endoftext_char(self):
+    def test_endoftext_char_encoded(self):
         expected = [1131, 5, 355, 1126, 628, 975, 10, 1130, 55, 988, 956, 984, 722, 988, 1131, 7]
 
         tokenizer = SimpleTokenizerV2(vocab)
@@ -51,6 +51,18 @@ class SimpleTokenizerTests(unittest.TestCase):
                 expected
             )
 
+    def test_endoftext_char_decoded(self):
+        expected = """<|unk|>, do you like tea? <|endoftext|> In the sunlit terraces of the <|unk|>."""
+
+        tokenizer = SimpleTokenizerV2(vocab)
+        encoded = self.encode_endoftext_char(tokenizer)
+
+        decoded = tokenizer.decode(encoded)
+
+        self.assertEqual(
+                decoded,
+                expected
+            )
 
 
 if __name__ == "__main__":
