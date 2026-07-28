@@ -1,9 +1,13 @@
+from typing import Protocol
+
 import tiktoken
 import torch
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import DataLoader, Dataset
 
-with open("the-verdict.txt", "r", encoding="utf-8") as f:
-    raw_text = f.read()
+
+class Tokenizer(Protocol):
+    def encode(self, text: str) -> list[int]:
+        ...
 
 
 class GPTDatasetV1(Dataset):
@@ -37,36 +41,3 @@ def create_dataloader_v1(txt, batch_size=4, max_length=256, stride=128, shuffle=
         )
 
     return dataloader
-
-dataloader = create_dataloader_v1(
-        raw_text, batch_size=1, max_length=4, stride=1, shuffle=False
-    )
-data_iter = iter(dataloader)
-first_batch = next(data_iter)
-print(first_batch)
-
-###
-vocab_size = 50257
-output_dim = 256
-token_embedding_layer = torch.nn.Embedding(vocab_size, output_dim)
-
-max_length = 4
-dataloader = create_dataloader_v1(
-        raw_text, batch_size=8, max_length=max_length, stride=max_length, shuffle=False
-    )
-data_iter = iter(dataloader)
-inputs, targets = next(data_iter)
-
-print("Token IDs\n", inputs)
-print("\nInputs shape:\n", inputs.shape)
-
-token_embeddings = token_embedding_layer(inputs)
-
-torch.Size([8, 4, 256])
-
-context_length = max_length
-pos_embedding_layer = torch.nn.Embedding(context_length, output_dim)
-pos_embeddings = pos_embedding_layer(torch.arange(context_length))
-
-input_embeddings = token_embeddings + pos_embeddings
-print(input_embeddings.shape)
