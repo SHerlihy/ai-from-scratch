@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import patch
 
+import tiktoken
 import torch
 
 from ai_from_scratch.data import GPTDatasetV1, create_dataloader_v1
@@ -48,6 +49,28 @@ class GPTDatasetV1Tests(unittest.TestCase):
 
         self.assertEqual(inputs.shape, torch.Size([2, 2]))
         self.assertEqual(targets.shape, torch.Size([2, 2]))
+
+    def test_gets_embeddings_from_journey_sentence(self):
+        text = "Your journey starts with one step"
+        try:
+            tokenizer = tiktoken.get_encoding("gpt2")
+        except Exception as exc:
+            self.skipTest(f"gpt2 tiktoken encoding is unavailable: {exc}")
+
+        token_ids = torch.tensor(tokenizer.encode(text))
+        embedding_layer = torch.nn.Embedding(
+            num_embeddings=tokenizer.n_vocab,
+            embedding_dim=4,
+        )
+
+        embeddings = embedding_layer(token_ids)
+
+        self.assertGreater(len(token_ids), 0)
+        self.assertEqual(embeddings.shape, torch.Size([len(token_ids), 4]))
+        torch.testing.assert_close(
+            embeddings[0],
+            embedding_layer.weight[token_ids[0]],
+        )
 
 
 if __name__ == "__main__":
