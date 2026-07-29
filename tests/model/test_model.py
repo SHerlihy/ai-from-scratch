@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 import torch
 
-from ai_from_scratch.model import CausalAttention
+from ai_from_scratch.model import MultiHeadAttention
 from ai_from_scratch.data import GPTDatasetV1, create_dataloader_v1
 
 class CausalAttentionTests(unittest.TestCase):
@@ -25,9 +25,10 @@ class CausalAttentionTests(unittest.TestCase):
         batch = torch.stack((inputs, inputs), dim=0)
 
         torch.manual_seed(123)
-        context_length = batch.shape[1]
-        ca = CausalAttention(d_in, d_out, context_length, 0.0)
-        context_vecs = ca(batch)
+        batch_size, context_length, d_in = batch.shape
+        d_out = 2
+        mha = MultiHeadAttention(d_in, d_out, context_length, 0.0, num_heads=2)
+        context_vecs = mha(batch)
 
         self.assertEqual(context_vecs.shape, torch.Size([2, 6, 2]))
 

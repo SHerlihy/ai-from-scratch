@@ -1,5 +1,5 @@
-from ai_from_scratch.model.model import CausalAttention
+from ai_from_scratch.model.model import MultiHeadAttention
 
-__all__ = ["CausalAttention"]
+__all__ = ["MultiHeadAttention"]
 
 
