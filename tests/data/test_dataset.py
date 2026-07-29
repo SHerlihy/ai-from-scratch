@@ -60,13 +60,13 @@ class GPTDatasetV1Tests(unittest.TestCase):
         token_ids = torch.tensor(tokenizer.encode(text))
         embedding_layer = torch.nn.Embedding(
             num_embeddings=tokenizer.n_vocab,
-            embedding_dim=4,
+            embedding_dim=3,
         )
 
         embeddings = embedding_layer(token_ids)
 
         self.assertGreater(len(token_ids), 0)
-        self.assertEqual(embeddings.shape, torch.Size([len(token_ids), 4]))
+        self.assertEqual(embeddings.shape, torch.Size([6, 3]))
         torch.testing.assert_close(
             embeddings[0],
             embedding_layer.weight[token_ids[0]],

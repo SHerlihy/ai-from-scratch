@@ -8,7 +8,19 @@ from ai_from_scratch.data import GPTDatasetV1, create_dataloader_v1
 
 class CausalAttentionTests(unittest.TestCase):
     def test_vector_shape(self):
-        inputs =  
+        text = "Your journey starts with one step"
+        try:
+            tokenizer = tiktoken.get_encoding("gpt2")
+        except Exception as exc:
+            self.skipTest(f"gpt2 tiktoken encoding is unavailable: {exc}")
+
+        token_ids = torch.tensor(tokenizer.encode(text))
+        embedding_layer = torch.nn.Embedding(
+            num_embeddings=tokenizer.n_vocab,
+            embedding_dim=3,
+        )
+
+        inputs = embedding_layer(token_ids)
 
         batch = torch.stack((inputs, inputs), dim=0)
 
