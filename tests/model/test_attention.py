@@ -3,10 +3,10 @@ from unittest.mock import patch
 
 import torch
 
-from ai_from_scratch.model import MultiHeadAttention
 from ai_from_scratch.data import GPTDatasetV1, create_dataloader_v1
+from ai_from_scratch.model.attention import MultiHeadAttention
 
-class CausalAttentionTests(unittest.TestCase):
+class AttentionTests(unittest.TestCase):
     def test_vector_shape(self):
         text = "Your journey starts with one step"
         try:
