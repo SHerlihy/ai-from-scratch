@@ -5,6 +5,7 @@ description = "A GPT-like language model built from tokenizer and data pipeline 
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "pydantic-settings",
     "tiktoken",
     "torch",
 ]
@@ -12,4 +13,3 @@ dependencies = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
-
